@@ -17,6 +17,7 @@ import com.hi.entity.Product;
 
 @Repository
 public class ProductDaoImpl implements ProductDao {
+	int a=0;
 	@Autowired
 	SessionFactory sf;
 
