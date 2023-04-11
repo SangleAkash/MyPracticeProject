@@ -26,7 +26,7 @@ public class ProductController {
 	@Autowired
 	ProductService ps;
 
-	@PostMapping(value = "/save-product")
+	@PostMapping(value = "/saveProduct")
 	public ResponseEntity<Boolean> saveProduct(@RequestBody Product product) {
 		boolean isAdded = ps.saveProduct(product);
 		if (isAdded) {
