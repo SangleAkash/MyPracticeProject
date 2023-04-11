@@ -231,5 +231,11 @@ public class ProductDaoImpl implements ProductDao {
 			}
 		}
 		return totalProducts;
-			}	
+			}
+
+	@Override
+	public int hi() {
+		// TODO Auto-generated method stub
+		return 0;
+	}	
 }

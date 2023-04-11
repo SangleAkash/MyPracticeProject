@@ -16,4 +16,5 @@ public interface ProductDao {
     public double getMaxPrice();
     public double countSumOfProductPrice();
     public int getTotalCountOfProducts();
+    public int hi();
 }
