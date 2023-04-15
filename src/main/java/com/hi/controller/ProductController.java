@@ -1,7 +1,10 @@
 package com.hi.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import javax.xml.ws.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.hi.entity.Product;
 import com.hi.service.ProductService;
@@ -27,7 +32,8 @@ public class ProductController {
 	ProductService ps;
 
 	@PostMapping(value = "/saveProduct")
-	public ResponseEntity<Boolean> saveProduct(@RequestBody Product product) {
+
+	public ResponseEntity<Boolean> saveProduct(@Valid @RequestBody Product product) {
 		boolean isAdded = ps.saveProduct(product);
 		if (isAdded) {
 			return new ResponseEntity<Boolean>(isAdded, HttpStatus.CREATED);
@@ -87,16 +93,18 @@ public class ProductController {
 		}
 
 	}
+
 	@GetMapping(value = "/get_maxPrice")
-	public ResponseEntity<Double> getMaxPrice()  {
-		 double maxPrice = ps.getMaxPrice();
-		if (maxPrice !=0.00) {
+	public ResponseEntity<Double> getMaxPrice() {
+		double maxPrice = ps.getMaxPrice();
+		if (maxPrice != 0.00) {
 			return new ResponseEntity<Double>(maxPrice, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Double>(maxPrice, HttpStatus.NO_CONTENT);
 		}
 
 	}
+
 	@GetMapping(value = "/get_maxPriceProducts")
 	public ResponseEntity<List<Product>> getMaxPriceProduct() {
 		List<Product> list = ps.getMaxPriceProduct();
@@ -107,24 +115,44 @@ public class ProductController {
 		}
 
 	}
+
 	@GetMapping(value = "/count_SumOfProductPrice")
 	public ResponseEntity<Double> countSumOfProductPrice() {
-		 double maxPrice = ps.countSumOfProductPrice();
-		if (maxPrice !=0.00) {
+		double maxPrice = ps.countSumOfProductPrice();
+		if (maxPrice != 0.00) {
 			return new ResponseEntity<Double>(maxPrice, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Double>(maxPrice, HttpStatus.NO_CONTENT);
 		}
 
 	}
+
 	@GetMapping(value = "/getTotalCount_OfProducts")
 	public ResponseEntity<Integer> getTotalCountOfProducts() {
 		int rowCount = ps.getTotalCountOfProducts();
-		if (rowCount !=0) {
+		if (rowCount != 0) {
 			return new ResponseEntity<Integer>(rowCount, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Integer>(rowCount, HttpStatus.NO_CONTENT);
 		}
+
+	}
+
+//	@PostMapping(value = "/import-file")
+//      public ResponseEntity<String> importFile(@RequestParam MultipartFile myfile) {
+//		String msg = ps.uploadSheet(myfile);
+//
+//		return ResponseEntity.ok(msg);
+//
+//	}
+
+	@PostMapping(value = "/uploadSheet")
+	public ResponseEntity<Map<String, Object>> uploadSheet(@RequestParam CommonsMultipartFile file,
+			HttpSession session) {
+		System.out.println(file.getOriginalFilename());
+		Map<String, Object> map = ps.uploadSheet(file, session);
+
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
 	}
 }

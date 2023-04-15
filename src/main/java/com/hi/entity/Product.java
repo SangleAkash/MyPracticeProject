@@ -5,14 +5,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+
+import org.springframework.lang.NonNull;
 
 @Entity
 @Table
 public class Product {
 	@Id
+	@Min(1)
 	@Column(unique=true,nullable=false)
 	private String ProductId;
 	
+	@NonNull
 	@Column(unique=true,nullable=false)
 	private String productName;
 	
@@ -22,10 +27,12 @@ public class Product {
 	@OneToOne
 	private Category category;
 	
+	@Min(1)
 	@Column(nullable=false)
 	private int productQty;
 	
 	@Column(nullable=false)
+	@Min(1)
 	private double productPrice;
 
 	public Product() {

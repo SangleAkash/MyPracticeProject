@@ -1,6 +1,10 @@
 package com.hi.daoImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.persistence.PersistenceException;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -17,6 +21,8 @@ import com.hi.entity.Product;
 
 @Repository
 public class ProductDaoImpl implements ProductDao {
+	
+	
 	int a=0;
 	@Autowired
 	SessionFactory sf;
@@ -233,6 +239,68 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return totalProducts;
 			}
+
+	@Override
+	public String uploadProduct(List<Product> list) {
+		Session session=null;
+		int addedCount=0;
+		int excludedCount=0;
+		try {
+			session=sf.openSession();
+			 for (Product product : list) {
+				 session.save(product);
+				 Transaction transaction = session.beginTransaction();
+				 transaction.commit();
+				 addedCount=addedCount+1;
+			}
+		}
+		catch (PersistenceException e) {
+			e.printStackTrace();
+			excludedCount=excludedCount+1;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			excludedCount=excludedCount+1;
+		}
+		return "Added= "+addedCount +"excluded = "+excludedCount;
+	}
+
+	@Override
+	public int[] uploadProductList(List<Product> list) {
+		Session session = null;
+		Transaction transaction = null;
+		int uploadedCount = 0;
+		int existCount=0;
+		int []arr=new int[2];
+		try {
+			
+			
+			for (Product product : list) {
+				
+				boolean isAdded = saveProduct(product);
+				if(isAdded) {
+					uploadedCount=uploadedCount+1;
+				}else {
+					existCount=existCount+1;
+				}
+				
+				
+			}
+			arr[0]=uploadedCount;
+			arr[1]=existCount;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+
+			}
+		}
+
+		return arr;
+	}
+
 
 		
 }

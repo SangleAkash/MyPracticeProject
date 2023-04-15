@@ -16,5 +16,6 @@ public interface ProductDao {
     public double getMaxPrice();
     public double countSumOfProductPrice();
     public int getTotalCountOfProducts();
-   
+    public String uploadProduct(List<Product> list);
+    public  int[] uploadProductList(List<Product> list);
 }

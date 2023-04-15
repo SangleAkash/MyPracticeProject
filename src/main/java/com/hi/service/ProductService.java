@@ -1,6 +1,12 @@
 package com.hi.service;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.hi.entity.Product;
 
@@ -16,4 +22,6 @@ public interface ProductService {
 	    public double getMaxPrice();
 	    public double countSumOfProductPrice();
 	    public int getTotalCountOfProducts();
+	    public String uploadSheet(MultipartFile file);
+	    public Map<String,Object> uploadSheet(CommonsMultipartFile file,HttpSession session);
 }
