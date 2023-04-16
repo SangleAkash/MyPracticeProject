@@ -14,7 +14,10 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -287,6 +290,52 @@ public class ProductServiceImpl implements ProductService {
 			e.printStackTrace();
 		}
 		return map;
+	}
+
+	@Override
+	public String exportToExcel(HttpSession session) {
+		String[] columns = { "productName", "categoryId", "supplierId", "productQty", "productPrice" };
+		 List<Product> list=getAllProduct();
+		 String filePath=null;
+		try {
+			Workbook workbook = new XSSFWorkbook();
+			Sheet sheet = workbook.createSheet("product");
+			Font headerFond = workbook.createFont();
+			headerFond.setBold(true);
+			headerFond.setFontHeightInPoints((short) 14);
+			headerFond.setColor(IndexedColors.RED.getIndex());
+			
+			CellStyle headerCellStyle = workbook.createCellStyle();
+			headerCellStyle.setFont(headerFond);
+			Row row = sheet.createRow(0);
+			for (int i = 0; i < columns.length; i++) {
+				Cell cell = row.createCell(i);
+				cell.setCellValue(columns[i]);
+				cell.setCellStyle(headerCellStyle);
+
+			}
+			int rowNo=1;
+			for (Product product : list) {
+				Row createRow = sheet.createRow(rowNo++);
+				createRow.createCell(0).setCellValue(product.getProductId());
+			    createRow.createCell(1).setBlank();
+				createRow.createCell(2).setBlank();
+				createRow.createCell(3).setCellValue(product.getProductQty());
+				createRow.createCell(4).setCellValue(product.getProductPrice());
+			}
+			for (int i = 0; i < columns.length; i++) {
+				sheet.autoSizeColumn(i);
+			}
+			filePath=System.getProperty("user.home");
+			filePath=filePath+"/Downloads";
+			FileOutputStream fileOut = new FileOutputStream(filePath + File.separator + "product.xlsx");
+			workbook.write(fileOut);
+			fileOut.close();
+		} catch (Exception e) {
+			
+		}
+		
+		return filePath+File.separator+"product.xlsx";
 	}
 
 }

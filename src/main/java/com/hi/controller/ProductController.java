@@ -155,4 +155,10 @@ public class ProductController {
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
 	}
+	@GetMapping(value="/exportToExcel")
+	public ResponseEntity<String> exportToExcel(HttpSession session){
+		String path = ps.exportToExcel(session);
+		return new ResponseEntity<String>(path,HttpStatus.OK);
+		
+	}
 }

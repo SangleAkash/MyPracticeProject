@@ -24,4 +24,5 @@ public interface ProductService {
 	    public int getTotalCountOfProducts();
 	    public String uploadSheet(MultipartFile file);
 	    public Map<String,Object> uploadSheet(CommonsMultipartFile file,HttpSession session);
+	    public String exportToExcel(HttpSession session);
 }
