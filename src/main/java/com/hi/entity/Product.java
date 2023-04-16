@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 import org.springframework.lang.NonNull;
 
 @Entity
-@Table
+@Table(name="deployment")
 public class Product {
 	@Id
 	@Min(1)
